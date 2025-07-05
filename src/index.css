@@ -126,4 +126,8 @@
   .section {
     @apply px-4 max-w-7xl mx-auto my-6 md:my-8 lg:my-12 py-6 md:py-8 lg:py-12;
   }
+
+  .logo{
+    @apply w-10 h-10 rounded-full;
+  }
 }
