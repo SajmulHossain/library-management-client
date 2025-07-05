@@ -3,42 +3,40 @@ import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { usePostBookMutation } from "@/redux/bookApi/bookApi";
+import type { IBook } from "@/types/book.type";
+import { LoaderPinwheel } from "lucide-react";
 import { useForm } from "react-hook-form";
-import * as z from "zod/v4";
+import { toast } from "sonner";
+
+export type BookType = Omit<IBook, "_id" | "available">;
+
+
 const AddBook = () => {
+  const [postBook, { isLoading, isSuccess }] = usePostBookMutation();
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    const bookTypes = z.object({
-      title: z.string(),
-      author: z.string(),
-      isbn: z.string(),
-      genre: z.enum([
-        "FICTION",
-        "NON_FICTION",
-        "SCIENCE",
-        "HISTORY",
-        "FANTASY",
-      ]),
-      description: z.string().optional(),
-      copies: z.number().min(1),
-    });
-    const copies = parseInt(data.copies);
-
-    const book = bookTypes.parse({...data, copies});
-    console.log(book);
+  } = useForm<BookType>();
+  const onSubmit = async (body: BookType) => {
+    if (isSuccess) {
+      toast("Book posted successfully", { icon: "🤝" });
+    } else {
+        toast("Something went wrong", { icon: "❌" });
+    }
+    await postBook(body);
   };
+
   return (
     <section className="section max-w-xl">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -64,10 +62,12 @@ const AddBook = () => {
             }
             type="text"
             placeholder="Author"
-            {...register("author", { required: true, min: 3 })}
+            {...register("author", { required: true, minLength: 3 })}
           />
           {errors.author && (
-            <span className="text-red-700">Author is required</span>
+            <span className="text-red-700">
+              {errors.author.message || "Author is required"}
+            </span>
           )}
         </div>
         <div>
@@ -77,14 +77,14 @@ const AddBook = () => {
             name="genre"
             render={({ field }) => (
               <>
-                <Label>Genre</Label>
+                <Label className="mb-2">Genre</Label>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Genre" />
                   </SelectTrigger>
                   <SelectContent
                     className={
-                      errors.title
+                      errors.genre
                         ? "border-red-500 focus-visible:ring-red-500"
                         : ""
                     }
@@ -120,7 +120,7 @@ const AddBook = () => {
         </div>
         <div className="flex flex-col gap-2">
           <Label>Description</Label>
-          <Textarea placeholder="Description" {...register} />
+          <Textarea placeholder="Description" {...register("description")} />
         </div>
         <div className="flex flex-col gap-2">
           <Label>Copies</Label>
@@ -130,14 +130,18 @@ const AddBook = () => {
             }
             type="number"
             placeholder="Copies"
-            {...register("copies", { required: true, min: 1 })}
+            {...register("copies", {
+              required: true,
+              min: 1,
+              valueAsNumber: true,
+            })}
           />
           {errors.copies && (
-            <span className="text-red-700">Copies is required</span>
+            <span className="text-red-700">{"Copies is required"}</span>
           )}
         </div>
 
-        <Button type="submit">Add Book</Button>
+        <Button disabled={isLoading} type="submit">Add Book {isLoading && <LoaderPinwheel className="animate-spin" />}</Button>
       </form>
     </section>
   );
