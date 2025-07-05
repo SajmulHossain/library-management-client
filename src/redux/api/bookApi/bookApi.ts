@@ -4,14 +4,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const bookApi = createApi({
   reducerPath: "bookApi",
-  tagTypes : ["books"],
+  tagTypes : ["books", "states"],
   baseQuery: fetchBaseQuery({
     // baseUrl: "https://library-management-omega-green.vercel.app/api/books",
     baseUrl: "http://localhost:3000/api/books"
   }),
   endpoints: (builder) => ({
     getAllBooks: builder.query({
-      query: () => "",
+      query: (index) => `?skip=${index-1}`,
       providesTags: ["books"]
     }),
     postBook: builder.mutation<BookType, Partial<BookType>, IPostResponse>({
@@ -20,9 +20,13 @@ export const bookApi = createApi({
         method: 'POST',
         body: body
       }),
-      invalidatesTags: ["books"],
-    })
+      invalidatesTags: ["books", "states"],
+    }),
+    getState: builder.query({
+      query: () => '/states',
+      providesTags: ["states"]
+    }),
   }),
 });
 
-export const { useGetAllBooksQuery, usePostBookMutation } = bookApi;
+export const { useGetAllBooksQuery, usePostBookMutation, useGetStateQuery } = bookApi;

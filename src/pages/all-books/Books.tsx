@@ -5,14 +5,18 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table";
-import { useGetAllBooksQuery } from "@/redux/bookApi/bookApi";
+import { useGetAllBooksQuery } from "@/redux/api/bookApi/bookApi";
 import type { IBook } from "@/types/book.type";
 import { BookData } from "./BookData";
 import BookDataLoader from "./BookDataLoader";
+import BookPagination from "./BookPagination";
+import { useAppSelector } from "@/redux/hook";
+
 
 const Books = () => {
+    const {currentIndex} = useAppSelector(state => state.books)
   const { data, isLoading,isError } =
-    useGetAllBooksQuery(undefined);
+    useGetAllBooksQuery(currentIndex);
 
   const { data: books = [...Array(6)] } = data || {};
 
@@ -45,6 +49,7 @@ const Books = () => {
           )}
         </TableBody>
       </Table>
+      <BookPagination />
     </section>
   );
 };

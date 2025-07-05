@@ -10,7 +10,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { usePostBookMutation } from "@/redux/bookApi/bookApi";
+import { usePostBookMutation } from "@/redux/api/bookApi/bookApi";
 import type { IBook } from "@/types/book.type";
 import { LoaderPinwheel } from "lucide-react";
 import { useForm } from "react-hook-form";
