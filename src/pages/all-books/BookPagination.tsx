@@ -38,7 +38,7 @@ const BookPagination = () => {
           <PaginationLink>
             <Button
               disabled={currentIndex === 1}
-              onClick={() =>{ dispatch(setIndex(currentIndex - 1));  }}
+              onClick={() => dispatch(setIndex(currentIndex - 1))}
               variant={"outline"}
             >
               Previous
@@ -50,7 +50,7 @@ const BookPagination = () => {
             <PaginationLink>
               <Button
                 variant={index + 1 === currentIndex ? "default" : "outline"}
-                onClick={() => {dispatch(setIndex(index + 1));  }}
+                onClick={() => dispatch(setIndex(index + 1))}
               >
                 {index + 1}
               </Button>
@@ -61,7 +61,7 @@ const BookPagination = () => {
           <PaginationLink>
             <Button
               disabled={currentIndex >= totalPage}
-              onClick={() => {dispatch(setIndex(currentIndex + 1));  }}
+              onClick={() => dispatch(setIndex(currentIndex + 1))}
               variant={"outline"}
             >
               Next
