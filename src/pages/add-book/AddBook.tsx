@@ -11,18 +11,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { usePostBookMutation } from "@/redux/api/bookApi/bookApi";
+import {
+  useGetSingleBookQuery,
+  usePostBookMutation,
+} from "@/redux/api/bookApi/bookApi";
 import type { IBook } from "@/types/book.type";
-import { LoaderPinwheel } from "lucide-react";
+import { LoaderCircleIcon, LoaderPinwheel } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
+import NetError from "../net error page/NetError";
 
 export type BookType = Omit<IBook, "_id" | "available">;
 
 const AddBook = () => {
-  const [postBook, { isLoading, isSuccess }] = usePostBookMutation();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const {
+    data,
+    isLoading: isFetching,
+    isError,
+  } = useGetSingleBookQuery(id, {
+    skip: !(pathname.includes("edit") && id),
+  });
+  const [postBook, { isLoading, isSuccess }] = usePostBookMutation();
 
   const {
     register,
@@ -33,13 +46,22 @@ const AddBook = () => {
   const onSubmit = async (body: BookType) => {
     if (isSuccess) {
       toast("Book posted successfully", { icon: "🤝" });
+      navigate("/books");
     } else {
       toast("Something went wrong", { icon: "❌" });
     }
     await postBook(body);
   };
 
-  return (
+  if (isError) {
+    return <NetError />;
+  }
+
+  return isFetching ? (
+    <div className="min-h-screen flex justify-center items-center">
+      <LoaderCircleIcon className="animate-spin" size={48} />
+    </div>
+  ) : (
     <section className="section max-w-xl">
       <Heading
         heading={pathname.includes("add-book") ? "Add Book" : "Edit Book"}
@@ -53,6 +75,7 @@ const AddBook = () => {
             }
             type="text"
             placeholder="Title"
+            defaultValue={data?.data?.title}
             {...register("title", { required: true })}
           />
           {errors.title && (
@@ -65,6 +88,7 @@ const AddBook = () => {
             className={
               errors.author ? "border-red-500 focus-visible:ring-red-500" : ""
             }
+            defaultValue={data?.data?.author}
             type="text"
             placeholder="Author"
             {...register("author", { required: true, minLength: 3 })}
@@ -83,7 +107,10 @@ const AddBook = () => {
             render={({ field }) => (
               <>
                 <Label className="mb-2">Genre</Label>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  value={data?.data?.genre || field.value}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Genre" />
                   </SelectTrigger>
@@ -94,12 +121,12 @@ const AddBook = () => {
                         : ""
                     }
                   >
-                    <SelectItem value="FICTION">FICTION</SelectItem>
-                    <SelectItem value="NON_FICTION">NON_FICTION</SelectItem>
-                    <SelectItem value="SCIENCE">SCIENCE</SelectItem>
-                    <SelectItem value="HISTORY">HISTORY</SelectItem>
-                    <SelectItem value="BIOGRAPHY">BIOGRAPHY</SelectItem>
-                    <SelectItem value="FANTASY">FANTASY</SelectItem>
+                    <SelectItem value="FICTION">Fiction</SelectItem>
+                    <SelectItem value="NON_FICTION">Non Fiction</SelectItem>
+                    <SelectItem value="SCIENCE">Science</SelectItem>
+                    <SelectItem value="HISTORY">History</SelectItem>
+                    <SelectItem value="BIOGRAPHY">Biography</SelectItem>
+                    <SelectItem value="FANTASY">Fantasy</SelectItem>
                   </SelectContent>
                 </Select>
               </>
@@ -115,6 +142,7 @@ const AddBook = () => {
             className={
               errors.isbn ? "border-red-500 focus-visible:ring-red-500" : ""
             }
+            defaultValue={data?.data?.isbn}
             type="text"
             placeholder="ISBN"
             {...register("isbn", { required: true, min: 8 })}
@@ -125,7 +153,11 @@ const AddBook = () => {
         </div>
         <div className="flex flex-col gap-2">
           <Label>Description</Label>
-          <Textarea placeholder="Description" {...register("description")} />
+          <Textarea
+            placeholder="Description"
+            defaultValue={data?.data?.description}
+            {...register("description")}
+          />
         </div>
         <div className="flex flex-col gap-2">
           <Label>Copies</Label>
@@ -133,6 +165,7 @@ const AddBook = () => {
             className={
               errors.copies ? "border-red-500 focus-visible:ring-red-500" : ""
             }
+            defaultValue={data?.data?.copies}
             type="number"
             placeholder="Copies"
             {...register("copies", {

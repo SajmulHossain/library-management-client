@@ -34,4 +34,4 @@ export const bookApi = createApi({
   }),
 });
 
-export const { useGetAllBooksQuery, usePostBookMutation, useGetStateQuery } = bookApi;
+export const { useGetAllBooksQuery, usePostBookMutation, useGetStateQuery, useGetSingleBookQuery } = bookApi;

@@ -1,9 +1,9 @@
 import {
-    Table,
-    TableBody,
-    TableHead,
-    TableHeader,
-    TableRow
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { useGetAllBooksQuery } from "@/redux/api/bookApi/bookApi";
 import type { IBook } from "@/types/book.type";
@@ -15,18 +15,15 @@ import { Separator } from "@/components/ui/separator";
 import Heading from "@/components/Heading";
 import NetError from "../net error page/NetError";
 
-
 const Books = () => {
-    const {currentIndex} = useAppSelector(state => state.books)
-  const { data, isLoading,isError } =
-    useGetAllBooksQuery(currentIndex);
+  const { currentIndex } = useAppSelector((state) => state.books);
+  const { data, isLoading, isError } = useGetAllBooksQuery(currentIndex);
 
-  const { data: books = [...Array(6)] } = data || {};
+  const { data: books = [...Array(10)] } = data || {};
 
-
-    if(isError) {
-        return <NetError />
-    }
+  if (isError) {
+    return <NetError />;
+  }
 
   return (
     <section className="section">

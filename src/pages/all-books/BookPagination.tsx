@@ -3,7 +3,7 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink
+  PaginationLink,
 } from "@/components/ui/pagination";
 import { useGetStateQuery } from "@/redux/api/bookApi/bookApi";
 import { setIndex, setState } from "@/redux/features/book/bookSlice";
