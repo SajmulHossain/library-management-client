@@ -24,7 +24,7 @@ const Books = () => {
   const { data: books = [...Array(6)] } = data || {};
 
 
-    if(!isError) {
+    if(isError) {
         return <NetError />
     }
 
