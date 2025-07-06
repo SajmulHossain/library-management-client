@@ -68,7 +68,7 @@ const AddBook = () => {
     } else {
       const { data } = await updateBook({ body, id });
       if (data?.success) {
-        toast("Book updated successfully", { icon: "🤝" });
+        toast("Book edited successfully", { icon: "🤝" });
         navigate("/books")
       } else {
         toast(data?.message || "Something Went Wrong", { icon: "❌" });
