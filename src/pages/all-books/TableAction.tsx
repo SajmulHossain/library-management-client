@@ -62,14 +62,17 @@ const TableAction = ({ id }: IProps) => {
         <DropdownMenuGroup>
           <DropdownMenuCheckboxItem>
             <Button
-              onClick={() => navigate(`/book/edit/${id}`)}
+              onClick={() => navigate(`/edit-bbok/${id}`)}
               className="w-full bg-green-700 hover:bg-green-800 text-white"
             >
               Edit Book <Edit />
             </Button>
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem>
-            <Button className="w-full">
+            <Button
+              onClick={() => navigate(`/borrow/${id}`)}
+              className="w-full"
+            >
               Borrow Book <Book />
             </Button>
           </DropdownMenuCheckboxItem>

@@ -1,3 +1,5 @@
+import type { IBorrowData } from "@/pages/borrow-request/BorrowRequest";
+import type { IPostResponse } from "@/types/postResponse.type";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const borrowApi = createApi({
@@ -13,7 +15,14 @@ export const borrowApi = createApi({
       query: () => "/borrow",
       providesTags: ["borrows-summary"],
     }),
+    postBorrow: builder.mutation<IPostResponse, IBorrowData>({
+      query: (body) => ({
+        url: '/borrow',
+        method: 'POST',
+        body
+      })
+    })
   }),
 });
 
-export const { useGetStatesQuery } = borrowApi;
+export const { useGetStatesQuery, usePostBorrowMutation } = borrowApi;

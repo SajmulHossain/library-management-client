@@ -57,7 +57,7 @@ const AddBook = () => {
   }, [data?.data?.genre, reset]);
 
   const onSubmit = async (body: BookType) => {
-    if (pathname.includes("add-book")) {
+    if (pathname.includes("create-book")) {
       const data = await postBook(body);
       if (data?.data?.success) {
         toast("Book posted successfully", { icon: "🤝" });
@@ -87,7 +87,7 @@ const AddBook = () => {
   ) : (
     <section className="section max-w-xl">
       <Heading
-        heading={pathname.includes("add-book") ? "Add Book" : "Edit Book"}
+        heading={pathname.includes("create-book") ? "Add Book" : "Edit Book"}
       />
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
@@ -204,7 +204,7 @@ const AddBook = () => {
         </div>
 
         <Button disabled={isLoading || isUpdating} type="submit">
-          {pathname.includes("add-book") ? "Add Book" : "Edit Book"}
+          {pathname.includes("create-book") ? "Add Book" : "Edit Book"}
           {(isLoading || isUpdating) && (
             <LoaderPinwheel className="animate-spin" />
           )}
