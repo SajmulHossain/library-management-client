@@ -26,7 +26,7 @@ const Books = () => {
   }
 
   return (
-    <section className="section pt-0">
+    <section className="section">
       <Heading heading="All Books" paragraph="See All Books" />
       <Table className="rounded-md overflow-hidden">
         <TableHeader className="bg-green-700">
