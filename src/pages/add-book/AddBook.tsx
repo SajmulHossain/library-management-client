@@ -1,26 +1,28 @@
+import Heading from "@/components/Heading";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { usePostBookMutation } from "@/redux/api/bookApi/bookApi";
 import type { IBook } from "@/types/book.type";
 import { LoaderPinwheel } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router";
 import { toast } from "sonner";
 
 export type BookType = Omit<IBook, "_id" | "available">;
 
-
 const AddBook = () => {
   const [postBook, { isLoading, isSuccess }] = usePostBookMutation();
+  const { pathname } = useLocation();
 
   const {
     register,
@@ -32,13 +34,16 @@ const AddBook = () => {
     if (isSuccess) {
       toast("Book posted successfully", { icon: "🤝" });
     } else {
-        toast("Something went wrong", { icon: "❌" });
+      toast("Something went wrong", { icon: "❌" });
     }
     await postBook(body);
   };
 
   return (
     <section className="section max-w-xl">
+      <Heading
+        heading={pathname.includes("add-book") ? "Add Book" : "Edit Book"}
+      />
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label>Title</Label>
@@ -141,7 +146,10 @@ const AddBook = () => {
           )}
         </div>
 
-        <Button disabled={isLoading} type="submit">Add Book {isLoading && <LoaderPinwheel className="animate-spin" />}</Button>
+        <Button disabled={isLoading} type="submit">
+          {pathname.includes("add-book") ? "Add Book" : "Edit Book"}
+          {isLoading && <LoaderPinwheel className="animate-spin" />}
+        </Button>
       </form>
     </section>
   );

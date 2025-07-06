@@ -11,6 +11,9 @@ import { BookData } from "./BookData";
 import BookDataLoader from "./BookDataLoader";
 import BookPagination from "./BookPagination";
 import { useAppSelector } from "@/redux/hook";
+import { Separator } from "@/components/ui/separator";
+import Heading from "@/components/Heading";
+import NetError from "../net error page/NetError";
 
 
 const Books = () => {
@@ -21,12 +24,13 @@ const Books = () => {
   const { data: books = [...Array(6)] } = data || {};
 
 
-    if(isError) {
-        return <div>error</div>
+    if(!isError) {
+        return <NetError />
     }
 
   return (
     <section className="section">
+      <Heading heading="All Books" paragraph="See All Books" />
       <Table>
         <TableHeader>
           <TableRow>
@@ -49,6 +53,7 @@ const Books = () => {
           )}
         </TableBody>
       </Table>
+      <Separator />
       <BookPagination />
     </section>
   );

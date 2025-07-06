@@ -7,23 +7,28 @@ export const bookApi = createApi({
   tagTypes : ["books", "states"],
   baseQuery: fetchBaseQuery({
     // baseUrl: "https://library-management-omega-green.vercel.app/api/books",
-    baseUrl: "http://localhost:3000/api/books"
+    baseUrl: import.meta.env.PROD ? import.meta.env.VITE_PROD_API : import.meta.env.VITE_DEVELOPMENT_API
   }),
   endpoints: (builder) => ({
     getAllBooks: builder.query({
-      query: (index) => `?skip=${index-1}`,
+      query: (index) => `/books?skip=${index-1}`,
       providesTags: ["books"]
     }),
+    getSingleBook: builder.query({
+      query: (id) => `/books/${id}`,
+      providesTags: ["books"]
+    })
+    ,
     postBook: builder.mutation<BookType, Partial<BookType>, IPostResponse>({
       query: (body) => ({
-        url: '',
+        url: '/books',
         method: 'POST',
         body: body
       }),
       invalidatesTags: ["books", "states"],
     }),
     getState: builder.query({
-      query: () => '/states',
+      query: () => '/books/states',
       providesTags: ["states"]
     }),
   }),

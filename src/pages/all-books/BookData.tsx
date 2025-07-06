@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export function BookData({ book }: IProps) {
-  const { title, author, available, copies, genre, isbn } = book;
+  const { title, author, available, copies, genre, isbn, _id } = book || {};
 
   return (
     <>
@@ -27,7 +27,7 @@ export function BookData({ book }: IProps) {
           </Badge>
         </TableCell>
         <TableCell className="text-center">
-          <TableAction />
+          <TableAction id={_id} />
         </TableCell>
       </TableRow>
     </>
