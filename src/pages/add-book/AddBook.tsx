@@ -14,9 +14,11 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   useGetSingleBookQuery,
   usePostBookMutation,
+  useUpdateBookMutation,
 } from "@/redux/api/bookApi/bookApi";
 import type { IBook } from "@/types/book.type";
 import { LoaderCircleIcon, LoaderPinwheel } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
@@ -36,21 +38,44 @@ const AddBook = () => {
     skip: !(pathname.includes("edit") && id),
   });
   const [postBook, { isLoading, isSuccess }] = usePostBookMutation();
+  const [updateBook, { isLoading: isUpdating, isSuccess: isUpdated }] =
+    useUpdateBookMutation();
 
   const {
+    reset,
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<BookType>();
-  const onSubmit = async (body: BookType) => {
-    if (isSuccess) {
-      toast("Book posted successfully", { icon: "🤝" });
-      navigate("/books");
-    } else {
-      toast("Something went wrong", { icon: "❌" });
+
+  useEffect(() => {
+    if (data?.data?.genre) {
+      reset({
+        genre: data.data.genre,
+      });
     }
-    await postBook(body);
+  }, [data?.data?.genre, reset]);
+
+  const onSubmit = async (body: BookType) => {
+    if (pathname.includes("add-book")) {
+      if (isSuccess) {
+        toast("Book posted successfully", { icon: "🤝" });
+        navigate("/books");
+      } else {
+        toast("Something went wrong", { icon: "❌" });
+      }
+      await postBook(body);
+    } else {
+      if (isUpdated) {
+        toast("Book updated successfully", { icon: "🤝" });
+        navigate("/books");
+      } else {
+        toast("Something went wrong", { icon: "❌" });
+      }
+
+      await updateBook({ body, id });
+    }
   };
 
   if (isError) {
@@ -109,7 +134,8 @@ const AddBook = () => {
                 <Label className="mb-2">Genre</Label>
                 <Select
                   onValueChange={field.onChange}
-                  value={data?.data?.genre || field.value}
+                  value={field.value}
+                  defaultValue={data?.data?.genre || ""}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Genre" />
@@ -179,9 +205,10 @@ const AddBook = () => {
           )}
         </div>
 
-        <Button disabled={isLoading} type="submit">
+        <Button disabled={isLoading || isUpdating} type="submit">
           {pathname.includes("add-book") ? "Add Book" : "Edit Book"}
-          {isLoading && <LoaderPinwheel className="animate-spin" />}
+          {isLoading ||
+            (isUpdating && <LoaderPinwheel className="animate-spin" />)}
         </Button>
       </form>
     </section>
