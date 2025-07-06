@@ -37,7 +37,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-black text-white">
+    <header className="bg-black/70 backdrop-blur-3xl text-white sticky top-0 z-50">
       <section className="section flex justify-between items-center my-0 py-4">
         <div className="flex items-center gap-2 font-semibold italic">
           <img className="logo" src={logo} alt="logo" />

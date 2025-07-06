@@ -20,7 +20,7 @@ export const bookApi = createApi({
       query: (id) => `/books/${id}`,
       providesTags: ["books"],
     }),
-    postBook: builder.mutation<BookType, Partial<BookType>, IPostResponse>({
+    postBook: builder.mutation<IPostResponse, Partial<BookType>, IPostResponse>({
       query: (body) => ({
         url: "/books",
         method: "POST",
@@ -33,14 +33,20 @@ export const bookApi = createApi({
       providesTags: ["states"],
     }),
     updateBook: builder.mutation<
-      { body: BookType; id: string },
-      Partial<{ body: BookType; id: string }>,
-      IPostResponse
+      IPostResponse,
+      Partial<{ body: BookType; id: string }>
     >({
       query: ({ body, id }) => ({
         url: `/books/${id}`,
         method: "PUT",
         body,
+      }),
+      invalidatesTags: ["books", "states"]
+    }),
+    deleteBook: builder.mutation<IPostResponse, Partial<string>>({
+      query: (id) => ({
+        url: `/books/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["books", "states"],
     }),
@@ -52,5 +58,6 @@ export const {
   usePostBookMutation,
   useGetStateQuery,
   useGetSingleBookQuery,
-  useUpdateBookMutation
+  useUpdateBookMutation,
+  useDeleteBookMutation,
 } = bookApi;

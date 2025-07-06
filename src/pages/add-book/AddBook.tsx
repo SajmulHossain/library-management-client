@@ -37,9 +37,8 @@ const AddBook = () => {
   } = useGetSingleBookQuery(id, {
     skip: !(pathname.includes("edit") && id),
   });
-  const [postBook, { isLoading, isSuccess }] = usePostBookMutation();
-  const [updateBook, { isLoading: isUpdating, isSuccess: isUpdated }] =
-    useUpdateBookMutation();
+  const [postBook, { isLoading }] = usePostBookMutation();
+  const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
 
   const {
     reset,
@@ -59,22 +58,21 @@ const AddBook = () => {
 
   const onSubmit = async (body: BookType) => {
     if (pathname.includes("add-book")) {
-      if (isSuccess) {
+      const data = await postBook(body);
+      if (data?.data?.success) {
         toast("Book posted successfully", { icon: "🤝" });
         navigate("/books");
       } else {
-        toast("Something went wrong", { icon: "❌" });
+        toast("Something Went Wrong", { icon: "❌" });
       }
-      await postBook(body);
     } else {
-      if (isUpdated) {
+      const { data } = await updateBook({ body, id });
+      if (data?.success) {
         toast("Book updated successfully", { icon: "🤝" });
-        navigate("/books");
+        navigate("/books")
       } else {
-        toast("Something went wrong", { icon: "❌" });
+        toast(data?.message || "Something Went Wrong", { icon: "❌" });
       }
-
-      await updateBook({ body, id });
     }
   };
 
@@ -207,8 +205,9 @@ const AddBook = () => {
 
         <Button disabled={isLoading || isUpdating} type="submit">
           {pathname.includes("add-book") ? "Add Book" : "Edit Book"}
-          {isLoading ||
-            (isUpdating && <LoaderPinwheel className="animate-spin" />)}
+          {(isLoading || isUpdating) && (
+            <LoaderPinwheel className="animate-spin" />
+          )}
         </Button>
       </form>
     </section>

@@ -18,8 +18,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Book, Edit, MenuIcon, Trash2Icon } from "lucide-react";
+import { useDeleteBookMutation } from "@/redux/api/bookApi/bookApi";
+import {
+  Book,
+  Edit,
+  FileWarningIcon,
+  LoaderIcon,
+  MenuIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 type IProps = {
   id: string;
@@ -27,6 +36,19 @@ type IProps = {
 
 const TableAction = ({ id }: IProps) => {
   const navigate = useNavigate();
+
+  const [deleteBook, { isLoading }] = useDeleteBookMutation();
+
+  const handleDelete = async () => {
+    const data = await deleteBook(id);
+
+    if (data?.data?.success) {
+      toast("Book Deleted Successfully", { icon: "✅" });
+    } else {
+      toast("Could not delete", { icon: "❌" });
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -51,7 +73,7 @@ const TableAction = ({ id }: IProps) => {
               Borrow Book <Book />
             </Button>
           </DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem onSelect={(e) => e.preventDefault()}>
             <Dialog>
               <form>
                 <DialogTrigger asChild>
@@ -61,17 +83,26 @@ const TableAction = ({ id }: IProps) => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2 text-red-600">
+                      <FileWarningIcon /> Delete Book?
+                    </DialogTitle>
                     <DialogDescription>
-                      Make changes to your profile here. Click save when
-                      you&apos;re done.
+                      Deleted book cannot be undone!
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>
                       <Button variant="outline">Cancel</Button>
                     </DialogClose>
-                    <Button type="submit">Save changes</Button>
+                    <Button
+                      disabled={isLoading}
+                      onClick={handleDelete}
+                      variant="destructive"
+                      type="submit"
+                    >
+                      Delete{" "}
+                      {isLoading && <LoaderIcon className="animate-spin" />}
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </form>
