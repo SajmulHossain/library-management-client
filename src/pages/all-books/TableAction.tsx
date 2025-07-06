@@ -62,7 +62,7 @@ const TableAction = ({ id }: IProps) => {
         <DropdownMenuGroup>
           <DropdownMenuCheckboxItem>
             <Button
-              onClick={() => navigate(`/edit-bbok/${id}`)}
+              onClick={() => navigate(`/edit-book/${id}`)}
               className="w-full bg-green-700 hover:bg-green-800 text-white"
             >
               Edit Book <Edit />

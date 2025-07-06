@@ -8,8 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useGetSingleBookQuery } from "@/redux/api/bookApi/bookApi";
-import { usePostBorrowMutation } from "@/redux/api/borrowApi/borrowApi";
+import { useGetSingleBookQuery, usePostBorrowMutation } from "@/redux/api/bookApi/bookApi";
 import { ChevronDownIcon, Loader, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

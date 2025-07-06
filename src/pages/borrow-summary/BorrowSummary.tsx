@@ -6,13 +6,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetStatesQuery } from "@/redux/api/borrowApi/borrowApi";
 import BookDataLoader from "../all-books/BookDataLoader";
 import type { ISummary } from "@/types/summary.type";
+import NetError from "../net error page/NetError";
+import { useGetBorrowStatesQuery } from "@/redux/api/bookApi/bookApi";
 
 const BorrowSummary = () => {
-  const { data, isLoading } = useGetStatesQuery(undefined);
+  const { data, isLoading, isError } = useGetBorrowStatesQuery(undefined);
   const summaries = data?.data || [...Array(6)];
+
+if(isError) {
+  return <NetError />
+}
 
   return (
     <section className="section">

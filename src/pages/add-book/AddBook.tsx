@@ -114,7 +114,7 @@ const AddBook = () => {
             defaultValue={data?.data?.author}
             type="text"
             placeholder="Author"
-            {...register("author", { required: true, minLength: 3 })}
+            {...register("author", { required: true, minLength: {value: 3, message: 'Author name must atleast 3 characters'} })}
           />
           {errors.author && (
             <span className="text-red-700">
@@ -169,7 +169,7 @@ const AddBook = () => {
             defaultValue={data?.data?.isbn}
             type="text"
             placeholder="ISBN"
-            {...register("isbn", { required: true, min: 8 })}
+            {...register("isbn", { required: true })}
           />
           {errors.isbn && (
             <span className="text-red-700">ISBN is required</span>
@@ -194,12 +194,15 @@ const AddBook = () => {
             placeholder="Copies"
             {...register("copies", {
               required: true,
-              min: 1,
+              min: {
+                value: 1,
+                message: 'Copies must be greater than 0'
+              },
               valueAsNumber: true,
             })}
           />
           {errors.copies && (
-            <span className="text-red-700">{"Copies is required"}</span>
+            <span className="text-red-700">{errors.copies.message || "Copies is required"}</span>
           )}
         </div>
 

@@ -1,10 +1,11 @@
 import type { BookType } from "@/pages/add-book/AddBook";
+import type { IBorrowData } from "@/pages/borrow-request/BorrowRequest";
 import type { IPostResponse } from "@/types/postResponse.type";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const bookApi = createApi({
   reducerPath: "bookApi",
-  tagTypes: ["books", "states"],
+  tagTypes: ["books", "states", "borrows-summary"],
   baseQuery: fetchBaseQuery({
     // baseUrl: "https://library-management-omega-green.vercel.app/api/books",
     baseUrl: import.meta.env.PROD
@@ -20,14 +21,16 @@ export const bookApi = createApi({
       query: (id) => `/books/${id}`,
       providesTags: ["books"],
     }),
-    postBook: builder.mutation<IPostResponse, Partial<BookType>, IPostResponse>({
-      query: (body) => ({
-        url: "/books",
-        method: "POST",
-        body: body,
-      }),
-      invalidatesTags: ["books", "states"],
-    }),
+    postBook: builder.mutation<IPostResponse, Partial<BookType>, IPostResponse>(
+      {
+        query: (body) => ({
+          url: "/books",
+          method: "POST",
+          body: body,
+        }),
+        invalidatesTags: ["books", "states"],
+      }
+    ),
     getState: builder.query({
       query: () => "/books/states",
       providesTags: ["states"],
@@ -41,7 +44,7 @@ export const bookApi = createApi({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["books", "states"]
+      invalidatesTags: ["books", "states"],
     }),
     deleteBook: builder.mutation<IPostResponse, Partial<string>>({
       query: (id) => ({
@@ -49,6 +52,18 @@ export const bookApi = createApi({
         method: "DELETE",
       }),
       invalidatesTags: ["books", "states"],
+    }),
+    getBorrowStates: builder.query({
+      query: () => "/borrow",
+      providesTags: ["borrows-summary"],
+    }),
+    postBorrow: builder.mutation<IPostResponse, IBorrowData>({
+      query: (body) => ({
+        url: "/borrow",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ['books', 'borrows-summary'],
     }),
   }),
 });
@@ -60,4 +75,6 @@ export const {
   useGetSingleBookQuery,
   useUpdateBookMutation,
   useDeleteBookMutation,
+  usePostBorrowMutation,
+  useGetBorrowStatesQuery
 } = bookApi;
