@@ -1,69 +1,126 @@
-# React + TypeScript + Vite
+# 📚 Minimal Library Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a minimal, clean, and fully functional library management system I developed using **React**, **TypeScript**, **Redux Toolkit Query**, and **Tailwind CSS** on the frontend, with a **Node.js**, **Express**, and **MongoDB** backend. The project showcases practical usage of CRUD operations, client-server communication, and proper UI/UX design—without user authentication or advanced business logic like payments or category filters.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 👨‍💻 My Objective
 
-## Expanding the ESLint configuration
+The goal was to design a clean and functional library app where users can:
+- Add and edit books
+- Borrow books with quantity and due date
+- Track borrowed books in a summarized view
+- All while managing data through a RESTful API with proper state handling using RTK Query
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🔧 Tech Stack I Used
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+| Layer        | Technology                    |
+|--------------|-------------------------------|
+| Frontend     | React + TypeScript            |
+| State Management   | Redux Toolkit + RTK Query     |
+| Styling      | Tailwind CSS                  |
+| Backend      | Node.js + Express.js          |
+| Database     | MongoDB + Mongoose            |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## ✨ Key Features I Implemented
+
+### 📘 Book Management
+- CRUD operations on books (Add, Edit, Delete)
+- Book availability logic (copies = 0 ➝ unavailable)
+- Proper form validation and real-time UI updates
+
+### 📖 Borrow System
+- Borrow form validates quantity against available copies
+- Updates book availability dynamically
+- Displays borrow summary with aggregated quantities
+
+### 📊 Borrow Summary
+- Aggregates total borrowed quantity per book
+- Makes use of backend aggregation pipeline
+
+### 🧭 Routing
+- `/books` – Book list with all actions
+- `/create-book` – Add new book
+- `/edit-book/:id` – Edit existing book
+- `/borrow/:bookId` – Borrow a book
+- `/borrow-summary` – Summary of borrowed books
+
+---
+
+## 🧠 Why I Built It This Way
+
+- **RTK Query**: To simplify API integration and caching.
+- **TypeScript**: For better scalability and safety.
+- **Modular Backend (MVC)**: Easier to maintain and test.
+- **Tailwind CSS**: Fast styling with responsive design out of the box.
+- **MongoDB Aggregation**: Clean and efficient way to compute borrow summaries.
+
+---
+
+## 🏆 Bonus Features I Added
+
+- ✅ Responsive design (desktop, tablet, mobile)
+- ✅ Toast notifications for user actions
+- ✅ Optimistic updates for better UX
+
+---
+
+## ⚙️ How to Run It
+
+### Backend
+
+```bash
+cd server
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Frontend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd client
+npm install
+npm run dev
 ```
+
+---
+
+## 📁 Project Structure
+
+```
+📁 src/
+ ┣ 📁 redux/
+ ┃ ┣ 📁 features/
+ ┣ 📁 components/
+ ┣ 📁 pages/
+ ┗ 📄 main.tsx
+
+📁 server/
+ ┣ 📁 controllers/
+ ┣ 📁 models/
+ ┣ 📁 interfaces/
+ ┗ 📄 server.ts
+ ┗ 📄 app.ts
+```
+
+---
+
+## 🚀 What I Learned
+
+- Structuring large-scale frontend projects with Redux Toolkit Query
+- Handling optimistic UI updates and caching
+- Building expressive, clean REST APIs
+- Aggregating data with MongoDB's `$group` pipeline
+- Managing feature completeness while keeping the UI minimal
+
+---
+
+## 📝 License
+
+This project is open-source and built for learning, showcasing, and portfolio purposes. Feel free to fork and extend it.
+
+---
