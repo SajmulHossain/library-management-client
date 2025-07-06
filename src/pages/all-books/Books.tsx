@@ -28,16 +28,16 @@ const Books = () => {
   return (
     <section className="section">
       <Heading heading="All Books" paragraph="See All Books" />
-      <Table>
-        <TableHeader>
+      <Table className="rounded-md overflow-hidden">
+        <TableHeader className="bg-green-700">
           <TableRow>
-            <TableHead className="w-[100px] text-center">Title</TableHead>
-            <TableHead className="text-center">Author</TableHead>
-            <TableHead className="text-center">Genre</TableHead>
-            <TableHead className="text-center">ISBN</TableHead>
-            <TableHead className="text-center">Copies</TableHead>
-            <TableHead className="text-center">Availability</TableHead>
-            <TableHead className="text-center">Actions</TableHead>
+            <TableHead className="text-white w-[100px] text-center">Title</TableHead>
+            <TableHead className="text-white text-center">Author</TableHead>
+            <TableHead className="text-white text-center">Genre</TableHead>
+            <TableHead className="text-white text-center">ISBN</TableHead>
+            <TableHead className="text-white text-center">Copies</TableHead>
+            <TableHead className="text-white text-center">Availability</TableHead>
+            <TableHead className="text-white text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

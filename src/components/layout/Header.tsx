@@ -11,7 +11,7 @@ import { MenuIcon } from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router";
 
-import logo from '@/assets/logo.png'
+import logo from "@/assets/logo.png";
 
 type LinkType = {
   to: string;
@@ -34,10 +34,14 @@ const Header = () => {
       to: "/add-book",
       name: "Add Book",
     },
+    {
+      to: "/borrow-summary",
+      name: "Borrow Summary",
+    },
   ];
 
   return (
-    <header className="bg-black/70 backdrop-blur-3xl text-white sticky top-0 z-50">
+    <header className="bg-black text-white sticky top-0 z-50">
       <section className="section flex justify-between items-center my-0 py-4">
         <div className="flex items-center gap-2 font-semibold italic">
           <img className="logo" src={logo} alt="logo" />

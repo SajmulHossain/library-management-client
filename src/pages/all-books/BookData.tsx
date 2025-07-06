@@ -12,10 +12,12 @@ export function BookData({ book }: IProps) {
 
   return (
     <>
-      <TableRow className="text-center">
+      <TableRow className="text-center bg-green-300">
         <TableCell className="font-medium">{title}</TableCell>
         <TableCell className="font-medium">{author}</TableCell>
-        <TableCell className="text-center">{genre}</TableCell>
+        <TableCell className="text-center">
+          {genre === "NON_FICTION" ? "NON FICTION" : genre}
+        </TableCell>
         <TableCell className="text-center">{isbn}</TableCell>
         <TableCell>{copies}</TableCell>
         <TableCell>
